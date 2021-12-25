@@ -67,7 +67,7 @@
 <h4>Tus nuevas credenciales son:</h4>
 <ul>
     <li>
-        <strong>E-Mail:</strong>
+        <strong>DNI:</strong>
         {{ $msg['dni'] }}
     </li>
     <li>
