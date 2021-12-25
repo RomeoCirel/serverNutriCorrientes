@@ -69,10 +69,21 @@ class PasswordController extends Controller
      * Store a newly created resource in storage.
      *
      * @param ModificarClaveRequest $request
-     * @return Response
+     * @return JsonResponse
+     * @throws Exception
      */
-    public function modificar(ModificarClaveRequest $request): Response
+    public function modificar(ModificarClaveRequest $request): JsonResponse
     {
-        //
+        try {
+            $nuevaClave = $request->input('password');
+            $usuario = $request->user();
+            $usuario->password = Hash::make($nuevaClave);
+            $usuario->save();
+            $authController = new AuthController;
+            return $authController->logoutAllSessions($request);
+        } catch (Exception $e) {
+            $mensaje = new MensajeError('No pudimos Editar su contraseña, vuelva a intenar mas tarde', 'NO_MOSIDFICADO');
+            return Respuesta::error($mensaje, 500);
+        }
     }
 }
