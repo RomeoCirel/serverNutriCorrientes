@@ -12,6 +12,7 @@ use App\Models\Usuario;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Throwable;
@@ -35,18 +36,22 @@ class PasswordController extends Controller
 
             $password = $this->generarCadenaAleatoria();
             $usuario->password = Hash::make($password);
-            $usuario->cambiar_clave = 1;
+            $usuario->cambiar_clave = true;
             $cuerpoMail = [
                 'nombre' => $usuario->nombre,
                 'apellido' => $usuario->apellido,
                 'dni' => $usuario->dni,
                 'clave' => $password
             ];
+            
             if ($usuario->save()) {
-                $exito = "Se le ha enviado una nueva contraseña al siguiente E-Mail";
-                Mail::to($usuario->email)->queue(new RecuperarClave($cuerpoMail, $asuntoMail));
+                $usuario->tokens()->delete();
+                $correo = $usuario->email;
+                $exito = "Se le ha enviado una nueva contraseña al siguiente E-Mail: $correo";
+                Mail::to($correo)->queue(new RecuperarClave($cuerpoMail, $asuntoMail));
                 $mensajeExito = new MensajeExito($exito, 'RECUPERADA');
-                return Respuesta::exito(['usuario' => $usuario], $mensajeExito, 200);
+
+                return Respuesta::exito([], $mensajeExito, 200);
             }
         } catch (Throwable $th) {
             $mensajeError = new MensajeError($error, 'NO_RECUPERADA');
