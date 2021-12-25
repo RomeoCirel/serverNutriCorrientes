@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\UsuariosController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -15,12 +16,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::post('auth/login', [AuthController::class, 'login']);
-Route::post('auth/recuperar', [PasswordController::class, 'recuperar']);
+Route::post('password/recuperar', [PasswordController::class, 'recuperar']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    // Sesion
     Route::post('auth/logout', [AuthController::class, 'logout']);
     Route::post('auth/logoutgeneral', [AuthController::class, 'logoutAllSessions']);
-   
+
+    // Password
+    Route::put('password', [PasswordController::class, 'modificar']);
+
     // Usuarios
     Route::apiResource('usuarios', UsuariosController::class);
     Route::post('usuarios/{usuario}/restaurar', [UsuariosController::class, 'restore']);
