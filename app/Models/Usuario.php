@@ -58,4 +58,11 @@ class Usuario extends Model
         'email_verified_at' => 'datetime',
         'cambiar_clave' => 'boolean'
     ];
+    /**
+     * @var mixed
+     */
+
+    public function genero(): BelongsTo {
+       return  $this->belongsTo(Genero::class);
+    }
 }
