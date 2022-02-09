@@ -85,7 +85,6 @@ class UsuariosRequest extends FormRequest
     {
         return [
             'genero_id.required' => 'Debe Seleccionar un genero',
-
         ];
     }
 
