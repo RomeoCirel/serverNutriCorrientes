@@ -10,7 +10,6 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\Usuarios\LoginRequest;
 
@@ -36,6 +35,22 @@ class AuthController extends Controller
             return Respuesta::error($mensaje, 500);
         }
         $tokenText = "$dni - $device";
+        return $this->setRespuestaToken($user, $tokenText);
+    }
+
+    /**
+     * Autenticar Usuario.
+     *
+     * @param LoginRequest $request
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function renovar(Request $request): JsonResponse
+    {
+        $device = $request->input('device_name');
+        $user = $request->user();
+        $user->currentAccessToken()->delete();
+        $tokenText = "$user->dni - $device";
         return $this->setRespuestaToken($user, $tokenText);
     }
 
@@ -106,11 +121,12 @@ class AuthController extends Controller
         $usuario = $user;
 
         $fechaActual = Carbon::now();
+        $fechaExpiracion = $fechaActual->addMinutes(40);
 
         $autenticacion = [
             'usuario' => $usuario,
             'token' => $usuario->createToken($tokenText)->plainTextToken,
-            'sesionIniciada' => $fechaActual->toIso8601String()
+            'sesionExpira' => $fechaExpiracion->toIso8601String()
         ];
 
         return Respuesta::exito(['autenticacion' => $autenticacion], null, 200);
