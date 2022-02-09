@@ -40,6 +40,13 @@ class UsuariosController extends Controller
         $this->modeloSingular = 'usuario';
         $this->modeloPlural = 'usuarios';
         $this->controladorBase = new BaseController($this->modeloSingular, $this->modeloPlural, $this->generoModelo);
+
+        $this->middleware('permission:personal.listado')->only('index');
+        $this->middleware('permission:personal.crear')->only('store');
+        $this->middleware('permission:personal.show')->only('show');
+        $this->middleware('permission:personal.editar')->only('edit');
+        $this->middleware('permission:personal.destroy')->only('destroy');
+        $this->middleware('permission:personal.restore')->only('restore');
     }
 
     /**
@@ -210,4 +217,5 @@ class UsuariosController extends Controller
             return Respuesta::error($mensajeError, 500);
         }
     }
+
 }
