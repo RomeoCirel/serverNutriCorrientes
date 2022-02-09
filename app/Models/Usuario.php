@@ -64,12 +64,17 @@ class Usuario extends Authenticatable
         'email_verified_at' => 'datetime',
         'cambiar_clave' => 'boolean'
     ];
+
     /**
-     * @var mixed
+     *
+     * @return BelongsTo
      */
 
-    public function genero(): BelongsTo {
-       return  $this->belongsTo(Genero::class);
+    public function genero(): BelongsTo
+    {
+        return $this->belongsTo(Genero::class);
+    }
+
     public function getPermisos()
     {
         $puede = $this->getAllPermissions()->mapWithKeys(function ($permisos) {
