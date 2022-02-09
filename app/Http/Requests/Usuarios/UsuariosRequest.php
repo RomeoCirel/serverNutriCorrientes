@@ -63,7 +63,7 @@ class UsuariosRequest extends FormRequest
 
     public function passwordActual()
     {
-        $this->reglas['passwordActual'] = ['bail', 'required', 'string', 'min:8', 'PasswordActual'];
+        $this->reglas['passwordActual'] = ['bail', 'required', new PasswordActual];
     }
 
     public function passwordComfirm()
