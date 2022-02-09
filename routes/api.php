@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UsuariosController;
 use App\Http\Controllers\UsuariosRolesController;
 use Illuminate\Http\Request;
@@ -37,5 +38,15 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         // Usuario --> Roles
         Route::get('{usuario}', [UsuariosRolesController::class, 'show']);
         Route::post('{usuario}/asignar', [UsuariosRolesController::class, 'store']);
+    });
+
+    // Role --> Permisos
+    Route::prefix('roles')->group(function () {
+
+        Route::get('/', [RolesController::class, 'index']);
+        Route::post('/', [RolesController::class, 'store']);
+        Route::get('/{role}', [RolesController::class, 'show']);
+        Route::put('/{role}', [RolesController::class, 'update']);
+        Route::delete('/{role}', [RolesController::class, 'destroy']);
     });
 });
