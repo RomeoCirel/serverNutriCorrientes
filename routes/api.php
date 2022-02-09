@@ -3,6 +3,7 @@
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UsuariosController;
+use App\Http\Controllers\UsuariosRolesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -32,4 +33,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResource('usuarios', UsuariosController::class);
     Route::post('usuarios/{usuario}/restaurar', [UsuariosController::class, 'restore']);
 
+    Route::prefix('usuarios/roles')->group(function () {
+        // Usuario --> Roles
+        Route::get('{usuario}', [UsuariosRolesController::class, 'show']);
+        Route::post('{usuario}/asignar', [UsuariosRolesController::class, 'store']);
+    });
 });
