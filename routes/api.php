@@ -23,6 +23,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // Sesion
     Route::post('auth/logout', [AuthController::class, 'logout']);
     Route::post('auth/logoutgeneral', [AuthController::class, 'logoutAllSessions']);
+    Route::get('auth/permisos', [AuthController::class, 'permisos']);
 
     // Password
     Route::put('password', [PasswordController::class, 'modificar']);

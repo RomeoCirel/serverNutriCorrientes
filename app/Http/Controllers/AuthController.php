@@ -81,6 +81,18 @@ class AuthController extends Controller
         return Respuesta::exito(['usuario' => $usuario], null, 200);
     }
 
+    public function permisos(Request $request): JsonResponse
+    {
+        try {
+            $usuario = $request->user();
+            $permisos = $usuario->getPermisos();
+            return Respuesta::exito(['permisos' => $permisos]);
+        } catch (Exception $e) {
+            $mensaje = new MensajeError('ha ocurrido un error al consultar sus Permisos.', 'NO_OBTENIDOS');
+            return Respuesta::error($mensaje, 500);
+        }
+    }
+
     /**
      * Formateo del JSON que devuelve el token
      *
