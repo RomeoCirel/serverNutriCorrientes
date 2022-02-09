@@ -23,7 +23,9 @@ Route::post('password/recuperar', [PasswordController::class, 'recuperar']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     // Sesion
+    Route::post('auth/renovar', [AuthController::class, 'renovar']);
     Route::post('auth/logout', [AuthController::class, 'logout']);
+    Route::post('auth/usuario', [AuthController::class, 'usuario']);
     Route::post('auth/logoutgeneral', [AuthController::class, 'logoutAllSessions']);
     Route::get('auth/permisos', [AuthController::class, 'permisos']);
 
